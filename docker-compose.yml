@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: wanderlust-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - wanderlust-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: wanderlust-frontend
+    ports:
+      - "9090:80"
+    depends_on:
+      - backend
+    networks:
+      - wanderlust-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: wanderlust-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - wanderlust-network
+
+  redis:
+    image: redis:latest
+    container_name: wanderlust-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - wanderlust-network
+
+networks:
+  wanderlust-network:
+
+volumes:
+  mongodb_data:
