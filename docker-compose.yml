@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: wanderlust-backend
     ports:
-      - "8080:8080"
+      - "8880:8880"
     env_file:
       - ./backend/.env
     depends_on:
